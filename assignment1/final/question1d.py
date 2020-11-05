@@ -51,7 +51,6 @@ def gradient_descent(learning_rate, epsilon):
             theta[j] = theta[j] + (learning_rate * summation)
             
         curr_cost = cost(theta)
-        # print(t, theta_t, prev_cost, curr_cost)
             
         if abs(curr_cost - prev_cost) < epsilon or t > 100000:
             return theta, np.array(all_thetas), np.array(all_costs)

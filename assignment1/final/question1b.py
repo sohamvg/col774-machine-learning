@@ -19,6 +19,8 @@ m = np.size(y)
 x = (x - x.mean()) / x.std() # normalize
 x = x.reshape((m, n))
 x = np.hstack((np.ones((m, 1)), x)) # add intercept
+
+x = x.reshape((m, n+1, 1))
 y = y.reshape((m, 1))
 
 def hypothesis(theta, x):
@@ -49,7 +51,6 @@ def gradient_descent(learning_rate, epsilon):
             theta[j] = theta[j] + (learning_rate * summation)
             
         curr_cost = cost(theta)
-        # print(t, theta_t, prev_cost, curr_cost)
             
         if abs(curr_cost - prev_cost) < epsilon or t > 100000:
             return theta, np.array(all_thetas), np.array(all_costs)
@@ -59,9 +60,10 @@ def gradient_descent(learning_rate, epsilon):
 
 theta, all_thetas, all_costs = gradient_descent(0.001, 1e-8)
 
-plt.scatter(x.T[1,:], y)
-plt.plot(x.T[1,:], [hypothesis(theta, xi) for xi in x], 'C1')
+plt.scatter(x[:, 1, 0], y)
+plt.plot(x[:, 1, 0], [hypothesis(theta, xi)[0] for xi in x], 'C1')
+
 plt.xlabel("x")
 plt.ylabel("y")
-plt.title("Data and hypothesis")
+plt.title("q1b")
 plt.savefig(os.path.join(out_dir, 'q1b.png'))
