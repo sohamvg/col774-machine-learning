@@ -1,3 +1,5 @@
+# %matplotlib notebook
+
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
@@ -13,7 +15,8 @@ plt.scatter(x, y)
 plt.show()
 
 # normalize
-x = (x - x.mean()) / x.std()
+x = x - x.mean()
+x = x / x.std()
 
 
 x = x.reshape((m, n))
@@ -65,51 +68,51 @@ plt.scatter(x.T[1,:], y)
 plt.plot(x.T[1,:], [hypothesis(theta, xi) for xi in x], 'C1')
 plt.show()
 
-theta0 = np.linspace(-4, 4, 40)
-theta1 = np.linspace(-4, 4, 40)
+# theta0 = np.linspace(-4, 4, 40)
+# theta1 = np.linspace(-4, 4, 40)
 
-X, Y = np.meshgrid(theta0, theta1)
+# X, Y = np.meshgrid(theta0, theta1)
+# # Z = f(X, Y)
+# def f(theta0, theta1):
+#     theta = np.array([[theta0],
+#                         [theta1]])
+#     return cost(theta)
+
+
 # Z = f(X, Y)
-def f(theta0, theta1):
-    theta = np.array([[theta0],
-                        [theta1]])
-    return cost(theta)
+# Z = Z.reshape((40, 40))
+# fig = plt.figure()
 
+# # ax = plt.axes(projection='3d')
+# # ax.contour3D(X, Y, Z, 50, cmap='binary')
+# fig, ax = plt.subplots(1, 1)
+# ax.contour(X, Y, Z)
+# # ax.set_xlabel('x')
+# # ax.set_ylabel('y')
+# # ax.set_zlabel('z')
+# # plt.plot(theta[0], theta[1], markersize=50)
+# # plt.show()
+# # temp = np.linspace(0,1,20)
+# # ax.plot3D(temp, temp, temp, 'red')
+# print(theta)
 
-Z = f(X, Y)
-Z = Z.reshape((40, 40))
-fig = plt.figure()
+# x0 = []
+# x1 = []
+# for theta, cost in thetas_and_costs:
+#     x0.append(theta[0][0])
+#     x1.append(theta[1][0])
+# #     fig = plt.figure()
 
-# ax = plt.axes(projection='3d')
-# ax.contour3D(X, Y, Z, 50, cmap='binary')
-fig, ax = plt.subplots(1, 1)
-ax.contour(X, Y, Z)
-# ax.set_xlabel('x')
-# ax.set_ylabel('y')
-# ax.set_zlabel('z')
-# plt.plot(theta[0], theta[1], markersize=50)
-# plt.show()
-# temp = np.linspace(0,1,20)
-# ax.plot3D(temp, temp, temp, 'red')
-print(theta)
-
-x0 = []
-x1 = []
-for theta, cost in thetas_and_costs:
-    x0.append(theta[0][0])
-    x1.append(theta[1][0])
-#     fig = plt.figure()
-
-#     # ax = plt.axes(projection='3d')
-#     # ax.contour3D(X, Y, Z, 50, cmap='binary')
-#     fig, ax = plt.subplots(1, 1)
-#     ax.contour(X, Y, Z)
-    # ax.set_xlabel('x')
-    # ax.set_ylabel('y')
-    # ax.set_zlabel('z')
-    plt.plot(x0, x1, markersize=50)
-    plt.draw()
-    plt.pause(0.2)
+# #     # ax = plt.axes(projection='3d')
+# #     # ax.contour3D(X, Y, Z, 50, cmap='binary')
+# #     fig, ax = plt.subplots(1, 1)
+# #     ax.contour(X, Y, Z)
+#     # ax.set_xlabel('x')
+#     # ax.set_ylabel('y')
+#     # ax.set_zlabel('z')
+#     plt.plot(x0, x1, markersize=50)
+#     plt.draw()
+#     plt.pause(0.2)
     
 
 import time
@@ -142,4 +145,3 @@ for theta, cost in thetas_and_costs:
     temp = np.linspace(0,1,20)
     ax.scatter3D([theta[0]], [theta[1]], cost, 'red')
     plt.show()
-    plt.pause(0.2)
