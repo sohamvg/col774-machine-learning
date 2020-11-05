@@ -65,6 +65,3 @@ plt.xlabel("x")
 plt.ylabel("y")
 plt.title("Data and hypothesis")
 plt.savefig(os.path.join(out_dir, 'q1b.png'))
-
-# with open(os.path.join(out_dir, 'q1a.txt'), "w+") as out_file:
-#     print(theta, file=out_file)

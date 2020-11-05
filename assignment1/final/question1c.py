@@ -2,7 +2,7 @@ import sys
 import os
 import numpy as np
 import matplotlib
-# matplotlib.use('Agg')
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 
@@ -59,8 +59,6 @@ def gradient_descent(learning_rate, epsilon):
 
 theta, all_thetas, all_costs = gradient_descent(0.001, 1e-8)
 
-print(all_thetas)
-
 theta0 = np.linspace(-2, 2, 40)
 theta1 = np.linspace(-2, 2, 40)
 
@@ -75,6 +73,11 @@ Z = f(X, Y)
 Z = Z.reshape((40, 40))
 
 ax = plt.axes(projection='3d')
-ax.contour3D(X, Y, Z, 50, cmap='binary')
+ax.contour3D(Y, X, Z, 70)
+ax.set_xlabel('theta0')
+ax.set_ylabel('theta1')
+ax.set_zlabel('J(theta)')
+ax.scatter3D(all_thetas[:, 0, 0], all_thetas[:, 1, 0], all_costs, color="red")
+plt.title("q1c")
 
-plt.show()
+plt.savefig(os.path.join(out_dir, 'q1c.png'))

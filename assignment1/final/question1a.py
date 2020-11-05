@@ -60,6 +60,3 @@ theta, all_thetas, all_costs = gradient_descent(0.001, 1e-8)
 
 with open(os.path.join(out_dir, 'q1a.txt'), "w+") as out_file:
     print(theta, file=out_file)
-    # np.savetxt(os.path.join(out_dir, 'theta.txt'), theta)
-    # np.savetxt(os.path.join(out_dir, 'all_thetas.txt'), all_thetas.reshape(all_thetas.shape[0], all_thetas.shape[1]))
-    # np.savetxt(os.path.join(out_dir, 'all_costs.txt'), all_costs)

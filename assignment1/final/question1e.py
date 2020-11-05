@@ -2,7 +2,7 @@ import sys
 import os
 import numpy as np
 import matplotlib
-# matplotlib.use('Agg')
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 
@@ -19,6 +19,8 @@ m = np.size(y)
 x = (x - x.mean()) / x.std() # normalize
 x = x.reshape((m, n))
 x = np.hstack((np.ones((m, 1)), x)) # add intercept
+
+x = x.reshape((m, n+1, 1))
 y = y.reshape((m, 1))
 
 def hypothesis(theta, x):
@@ -49,16 +51,15 @@ def gradient_descent(learning_rate, epsilon):
             theta[j] = theta[j] + (learning_rate * summation)
             
         curr_cost = cost(theta)
-        print(t, theta_t, prev_cost, curr_cost)
+        # print(t, theta_t, prev_cost, curr_cost)
             
-        if abs(curr_cost - prev_cost) < epsilon or t > 100:
+        if abs(curr_cost - prev_cost) < epsilon or t > 1000:
             return theta, np.array(all_thetas), np.array(all_costs)
         prev_cost = curr_cost
         t += 1
 
-theta, all_thetas, all_costs = gradient_descent(0.025, 1e-8)
 
-print(all_thetas)
+theta, all_thetas, all_costs = gradient_descent(0.025, 1e-8)
 
 theta0 = np.linspace(-2, 2, 40)
 theta1 = np.linspace(-2, 2, 40)
@@ -74,9 +75,10 @@ Z = f(X, Y)
 Z = Z.reshape((40, 40))
 
 fig, ax = plt.subplots(1, 1)
-ax.contour(X, Y, Z)
-
-
+ax.contour(Y, X, Z)
+ax.set_xlabel('theta0')
+ax.set_ylabel('theta1')
 plt.plot(all_thetas[:, 0, 0], all_thetas[:, 1, 0], marker='o')
+plt.title('q1e')
 
-plt.show()
+plt.savefig(os.path.join(out_dir, 'q1e.png'))
