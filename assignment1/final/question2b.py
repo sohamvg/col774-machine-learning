@@ -2,7 +2,7 @@ import sys
 import os
 import numpy as np
 import matplotlib
-# matplotlib.use('Agg')
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 
@@ -32,8 +32,6 @@ def stochastic_gradient_descent(learning_rate, r, epsilon):
     theta = np.zeros((n+1, 1))
     prev_cost = cost(y, x, theta)
     k = 0
-#     thetas_and_costs = []
-#     thetas_and_costs.append((theta, prev_cost))
     
     while True:
     
@@ -57,5 +55,4 @@ def stochastic_gradient_descent(learning_rate, r, epsilon):
             
             if k > 5 or t > 1500:
                 return theta
-#             prev_cost = curr_cost
             t += 1
