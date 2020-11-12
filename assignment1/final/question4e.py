@@ -89,8 +89,6 @@ def get_x2(x1):
     coeff_0 = (a * (x1**2) / 2) - (e[0] * x1) + (f[0] * x1) + c - LHS
     return np.roots([coeff_2, coeff_1, coeff_0])
 
-# plt.plot(x[:, 0, 0], [get_x2(x1)[1] for x1 in x[:, 0, 0]], 'C2')
-plt.scatter([get_x1(x2)[1] for x2 in x[:, 1, 0]], x[:, 1, 0])
 
 x1_0 = []
 x2_0 = []
@@ -103,9 +101,28 @@ for i in range(m):
     else:
         x1_1.append(x[i][0])
         x2_1.append(x[i][1])        
-plt.scatter(x1_0, x2_0, marker='o')
-plt.scatter(x1_1, x2_1, marker='^')
+plt.scatter(x1_0, x2_0, marker='o', label="Alaska")
+plt.scatter(x1_1, x2_1, marker='^', label="Canada")
+
+x2_0 = []
+x2_1 = []
+for x1 in x[:, 0, 0]:
+    x2 = get_x2(x1)
+    if x2[0] > x2[1]:
+        x2_0.append(x2[0])
+        x2_1.append(x2[1])
+    else:
+        x2_0.append(x2[1])
+        x2_1.append(x2[0])
+
+plt.scatter(x[:, 0, 0], x2_0, color="green", label="boundary")
+plt.scatter(x[:, 0, 0], x2_1, color="lightgreen")
+
+
+# plt.legend(["Alaska {0}", "Canada {1}"])
 plt.xlabel("x1")
 plt.ylabel("x2")
+plt.title("q4c")
+plt.legend()
 
 plt.savefig(os.path.join(out_dir, 'q4e.png'))
