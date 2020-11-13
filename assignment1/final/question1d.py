@@ -78,6 +78,9 @@ ax.contour(Y, X, Z)
 ax.set_xlabel('theta0')
 ax.set_ylabel('theta1')
 plt.plot(all_thetas[:, 0, 0], all_thetas[:, 1, 0], marker='o')
+for i in range(all_thetas.shape[0]):
+    print(i)
+    plt.annotate(i, (all_thetas[i, 0, 0], all_thetas[i, 1, 0]))
 plt.title('q1d')
 
 plt.savefig(os.path.join(out_dir, 'q1d.png'))

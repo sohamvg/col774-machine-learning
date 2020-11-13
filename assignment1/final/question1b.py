@@ -10,6 +10,8 @@ data_dir = sys.argv[1]
 out_dir = sys.argv[2]
 
 # load data
+x_orig = np.genfromtxt(os.path.join(data_dir, 'linearX.csv'), delimiter=',')
+y_orig = np.genfromtxt(os.path.join(data_dir, 'linearY.csv'), delimiter=',')
 x = np.genfromtxt(os.path.join(data_dir, 'linearX.csv'), delimiter=',')
 y = np.genfromtxt(os.path.join(data_dir, 'linearY.csv'), delimiter=',')
 
@@ -60,8 +62,8 @@ def gradient_descent(learning_rate, epsilon):
 
 theta, all_thetas, all_costs = gradient_descent(0.001, 1e-8)
 
-plt.scatter(x[:, 1, 0], y)
-plt.plot(x[:, 1, 0], [hypothesis(theta, xi)[0] for xi in x], 'C1')
+plt.scatter(x_orig, y_orig)
+plt.plot(x_orig, [hypothesis(theta, xi)[0] for xi in x], 'C1')
 
 plt.xlabel("x")
 plt.ylabel("y")
