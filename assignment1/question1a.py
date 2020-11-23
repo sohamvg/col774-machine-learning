@@ -1,8 +1,7 @@
 import sys
 import os
 import numpy as np
-import matplotlib
-matplotlib.use('Agg')
+import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 
@@ -10,8 +9,6 @@ data_dir = sys.argv[1]
 out_dir = sys.argv[2]
 
 # load data
-x_orig = np.genfromtxt(os.path.join(data_dir, 'linearX.csv'), delimiter=',')
-y_orig = np.genfromtxt(os.path.join(data_dir, 'linearY.csv'), delimiter=',')
 x = np.genfromtxt(os.path.join(data_dir, 'linearX.csv'), delimiter=',')
 y = np.genfromtxt(os.path.join(data_dir, 'linearY.csv'), delimiter=',')
 
@@ -62,10 +59,5 @@ def gradient_descent(learning_rate, epsilon):
 
 theta, all_thetas, all_costs = gradient_descent(0.001, 1e-8)
 
-plt.scatter(x_orig, y_orig)
-plt.plot(x_orig, [hypothesis(theta, xi)[0] for xi in x], 'C1')
-
-plt.xlabel("x")
-plt.ylabel("y")
-plt.title("q1b")
-plt.savefig(os.path.join(out_dir, 'q1b.png'))
+with open(os.path.join(out_dir, 'q1a.txt'), "w+") as out_file:
+    print("Learning rate used is 0.001. Stopping criteria is when the absolute difference in consecutive losses is less than epsilon = 10^-8.\n theta = ",theta, file=out_file)

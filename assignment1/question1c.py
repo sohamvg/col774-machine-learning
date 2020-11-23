@@ -60,6 +60,7 @@ def gradient_descent(learning_rate, epsilon):
 
 theta, all_thetas, all_costs = gradient_descent(0.001, 1e-8)
 
+# plotting
 theta0 = np.linspace(-2, 2, 40)
 theta1 = np.linspace(-2, 2, 40)
 
@@ -73,14 +74,12 @@ def f(theta0, theta1):
 Z = f(X, Y)
 Z = Z.reshape((40, 40))
 
-fig, ax = plt.subplots(1, 1)
-ax.contour(Y, X, Z)
+ax = plt.axes(projection='3d')
+ax.contour3D(Y, X, Z, 70)
 ax.set_xlabel('theta0')
 ax.set_ylabel('theta1')
-plt.plot(all_thetas[:, 0, 0], all_thetas[:, 1, 0], marker='o')
-for i in range(all_thetas.shape[0]):
-    print(i)
-    plt.annotate(i, (all_thetas[i, 0, 0], all_thetas[i, 1, 0]))
-plt.title('q1d')
+ax.set_zlabel('J(theta)')
+ax.scatter3D(all_thetas[:, 0, 0], all_thetas[:, 1, 0], all_costs, color="red")
+plt.title("q1c")
 
-plt.savefig(os.path.join(out_dir, 'q1d.png'))
+plt.savefig(os.path.join(out_dir, 'q1c.png'))

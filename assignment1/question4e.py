@@ -118,8 +118,6 @@ for x1 in x[:, 0, 0]:
 plt.scatter(x[:, 0, 0], x2_0, color="green", label="boundary")
 plt.scatter(x[:, 0, 0], x2_1, color="lightgreen")
 
-
-# plt.legend(["Alaska {0}", "Canada {1}"])
 plt.xlabel("x1")
 plt.ylabel("x2")
 plt.title("q4c")

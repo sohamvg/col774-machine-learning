@@ -1,2 +1,3 @@
-[[0.99635129]
+Learning rate used is 0.001. Stopping criteria is when the absolute difference in consecutive losses is less than epsilon = 10^-8.
+ theta =  [[0.99635129]
  [0.00133983]]

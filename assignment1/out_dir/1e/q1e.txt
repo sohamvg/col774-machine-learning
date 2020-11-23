@@ -1,0 +1,1 @@
+It can be observed that gradient descent converged for learning rate of 0.001 but for learning rate of 0.025 and 0.1, gradient descent overshoot the minima and diverged away.

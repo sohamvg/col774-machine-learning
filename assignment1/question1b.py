@@ -10,6 +10,8 @@ data_dir = sys.argv[1]
 out_dir = sys.argv[2]
 
 # load data
+x_orig = np.genfromtxt(os.path.join(data_dir, 'linearX.csv'), delimiter=',')
+y_orig = np.genfromtxt(os.path.join(data_dir, 'linearY.csv'), delimiter=',')
 x = np.genfromtxt(os.path.join(data_dir, 'linearX.csv'), delimiter=',')
 y = np.genfromtxt(os.path.join(data_dir, 'linearY.csv'), delimiter=',')
 
@@ -32,7 +34,7 @@ def cost(theta):
         summation += (y[i] - hypothesis(theta, x[i]))**2
     return summation / (2 * m)
 
-def gradient_descent(learning_rate, epsilon, timeout):
+def gradient_descent(learning_rate, epsilon):
     t = 0
     theta = np.zeros((n+1, 1))
     prev_cost = cost(theta)
@@ -52,44 +54,19 @@ def gradient_descent(learning_rate, epsilon, timeout):
             
         curr_cost = cost(theta)
             
-        if abs(curr_cost - prev_cost) < epsilon or t > timeout:
+        if abs(curr_cost - prev_cost) < epsilon or t > 100000:
             return theta, np.array(all_thetas), np.array(all_costs)
         prev_cost = curr_cost
         t += 1
 
 
-vals = [(0.001, 1e-8, 1000), (0.025, 1e-6, 5), (0.1, 1e-6, 3)]
+theta, all_thetas, all_costs = gradient_descent(0.001, 1e-8)
 
-for v in vals:
-    learning_rate, epsilon, timeout = v
+# plotting
+plt.scatter(x_orig, y_orig)
+plt.plot(x_orig, [hypothesis(theta, xi)[0] for xi in x], 'C1')
 
-    theta, all_thetas, all_costs = gradient_descent(learning_rate, epsilon, timeout)
-    theta0 = np.linspace(-20, 20, 40)
-    theta1 = np.linspace(-20, 20, 40)
-    if learning_rate == 0.001:
-        theta0 = np.linspace(-2, 2, 40)
-        theta1 = np.linspace(-2, 2, 40)
-    elif learning_rate == 0.1:
-        theta0 = np.linspace(-5000, 5000, 40)
-        theta1 = np.linspace(-5000, 5000, 40)
-
-    X, Y = np.meshgrid(theta0, theta1)
-
-    def f(theta0, theta1):
-        theta = np.array([[theta0],
-                            [theta1]])
-        return cost(theta)
-
-    Z = f(X, Y)
-    Z = Z.reshape((40, 40))
-
-    fig, ax = plt.subplots(1, 1)
-    ax.contour(Y, X, Z)
-    ax.set_xlabel('theta0')
-    ax.set_ylabel('theta1')
-    plt.plot(all_thetas[:, 0, 0], all_thetas[:, 1, 0], marker='o')
-    for i in range(all_thetas.shape[0]):
-        plt.annotate(i, (all_thetas[i, 0, 0], all_thetas[i, 1, 0]))
-    plt.title('q1e' + ' learning rate = ' + str(learning_rate))
-
-    plt.savefig(os.path.join(out_dir, 'q1e_' + str(learning_rate) + '.png'))
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("q1b")
+plt.savefig(os.path.join(out_dir, 'q1b.png'))

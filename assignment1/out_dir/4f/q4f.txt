@@ -1,0 +1,1 @@
+Since we have a quadratic equation in x1 for each x2, we can see 2 quadratic curves out of which one is out quadratic boundary. The quadratic boundary seems to be a little better fit but mostly the linear boundary also resembles the quadratic boundary.
