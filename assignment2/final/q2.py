@@ -35,6 +35,9 @@ def write_predictions(fname, arr):
 
 
 class SVMBinaryClassifier:
+    """
+        SVM Binary Classifier
+    """
 
     def __init__(self, train_data, C, gamma):
         self.m, self.x, self.y = extract_data(train_data)
@@ -88,34 +91,84 @@ class SVMBinaryClassifier:
         return np.sign(sum(alpha[i] * y[i] * gaussian_kernel(x[i], x_predict, gamma) for i in range(m)) + b)
 
 
-def run(train_data, test_data):
-    train_data = np.genfromtxt(train_data, delimiter=',')
-    test_data = np.genfromtxt(test_data, delimiter=',')
+class SVMMultiClassifier:
+    """
+        SVM one vs. one Multi-class Classifier
+    """
 
-    total_classes = 10
-    svm = [[None for j in range(total_classes)] for i in range(total_classes)]
+    def __init__(self, total_classes, train_data, C, gamma):
+        self.total_classes = total_classes
+        self.svm = [[None for j in range(total_classes)] for i in range(total_classes)]
+        for i in range(total_classes):
+            for j in range(i+1, total_classes):
+                self.svm[i][j] = SVMBinaryClassifier(get_class_data(train_data, i, j), C, gamma)
 
-    for i in range(total_classes):
-        for j in range(i+1, total_classes):
-            svm[i][j] = SVMBinaryClassifier(get_class_data(train_data, i, j), 1, 0.05)
-            svm[i][j].train()
+    def get_svms(self):
+        return self.svm
 
-    m_test, x_test, y_test = extract_data(test_data)
+    def train(self):
+        total_classes, svm = self.total_classes, self.svm
+        for i in range(total_classes):
+            for j in range(i+1, total_classes):
+                svm[i][j].train()
 
-    test_predictions = np.zeros(m_test, np.int)
-
-    for t in range(m_test):
+    def predict(self, x_predict):
+        total_classes, svm = self.total_classes, self.svm
         votes = np.zeros(total_classes, np.int)
         for i in range(total_classes):
             for j in range(i+1, total_classes):
-                p = svm[i][j].predict(x_test[t])
+                p = svm[i][j].predict(x_predict)
                 if p < 0:
                     votes[i] += 1
                 else:
                     votes[j] += 1
-        test_predictions[t] = np.argmax(votes)
+        return np.argmax(votes)
+
+
+def run(train_data, test_data):
+    train_data = np.genfromtxt(train_data, delimiter=',')
+    test_data = np.genfromtxt(test_data, delimiter=',')
+
+    # split training data into train set and validation set in ratio 4:1
+    train_data_split = np.split(train_data, [int(len(train_data)/5)])
+    val_set_data = train_data_split[0]
+    train_set_data = train_data_split[1]
+
+    m_val, x_val, y_val = extract_data(val_set_data)
+
+    total_classes = 10
+    gamma = 0.05
+
+    # cross-validation to find optimal C
+    C_list = [1, 5, 10]
+    acc_list = np.zeros(len(C_list))
+
+    for i in range(len(C_list)):
+        C = C_list[i]
+        svm_multi = SVMMultiClassifier(total_classes, train_set_data, C, gamma)
+        svm_multi.train()
+
+        val_predictions = np.zeros(m_val, np.int)
+        for t in range(m_val):
+            val_predictions[t] = svm_multi.predict(x_val[t])
+
+        acc = np.sum((val_predictions == y_val.T)[0]) / m_val
+        acc_list[i] = acc
+
+    C = C_list[np.argmax(acc_list)] # optimal C
+    
+    # train multi-class SVM over full train data
+    svm_multi = SVMMultiClassifier(total_classes, train_data, C, gamma)
+    svm_multi.train()
+
+    # make predictions
+    m_test, x_test, y_test = extract_data(test_data)
+    test_predictions = np.zeros(m_test, np.int)
+    for t in range(m_test):
+        test_predictions[t] = svm_multi.predict(x_test[t])
 
     return test_predictions
+
 
 def main():
     train_data = sys.argv[1]
