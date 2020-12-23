@@ -166,7 +166,7 @@ def run(train_data, test_data, val_data):
     dtree.train()
 
     x_test, y_test = extract_data(test_data[2:])
-    predictions = []
+    predictions = [1]
     acc = 0
     for i in range(x_test.shape[0]):
         predictions.append(int(dtree.predict(x_test[i])))
