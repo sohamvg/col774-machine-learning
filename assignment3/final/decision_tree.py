@@ -90,8 +90,6 @@ class DecisionTree:
         self.num_labels = num_labels
 
     def grow_tree(self, D, max_depth):
-        # if self.num_nodes % 5000 == 0:
-        #     print("gt", D.shape, max_depth, self.depth, self.num_nodes)
         x, y = extract_data(D)
         if np.all(y == y[0]):
             # leaf node
@@ -164,13 +162,15 @@ def run(train_data, test_data, val_data):
     num_attributes = x.shape[1]
     num_labels = 7
 
-    dtree = DecisionTree(train_data, num_attributes, num_labels, 35)
+    dtree = DecisionTree(train_data, num_attributes, num_labels, 20)
     dtree.train()
 
     x_test, y_test = extract_data(test_data[2:])
     predictions = []
+    acc = 0
     for i in range(x_test.shape[0]):
-        predictions.append(dtree.predict(x_test[i]))
+        predictions.append(int(dtree.predict(x_test[i])))
+        # acc += int(dtree.predict(x_test[i]) == y_test[i])
 
     return predictions
 
