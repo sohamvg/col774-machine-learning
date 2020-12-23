@@ -175,7 +175,7 @@ class DecisionTree:
                 else:
                     return self.predict_node(child, x)
 
-    def post_prune(self, x_val, y_val):
+    def post_prune(self, x_val, y_val, x_train, y_train, x_test, y_test):
         # prunning
 
         while(True):
@@ -210,50 +210,35 @@ class DecisionTree:
             self.nodes_pruned += 1
 
 
+            train_acc = sum(int(self.predict(x_train[i]) == y_train[i]) for i in range(y_train.size)) * 100 / y_train.size
+            test_acc = sum(int(self.predict(x_test[i]) == y_test[i]) for i in range(y_test.size)) * 100 / y_test.size
+            val_acc = sum(int(self.predict(x_val[i]) == y_val[i]) for i in range(y_val.size)) * 100 / y_val.size
 
+            print(self.depth, self.num_nodes, self.nodes_pruned, train_acc, test_acc, val_acc)
 
-
-def run(train_data, test_data, val_data, question):
-
-    train_data = np.genfromtxt(train_data, delimiter=',')
-    test_data = np.genfromtxt(test_data, delimiter=',')
-    val_data = np.genfromtxt(val_data, delimiter=',')
-
-    train_data = train_data[2:]
-    x, y = extract_data(train_data)
-    num_attributes = x.shape[1]
-    num_labels = 7
-
-    if question == 1:
-        max_depth = 50
-    else:
-        max_depth = 15
-
-    dtree = DecisionTree(train_data, num_attributes, num_labels, max_depth)
-    dtree.train()
-
-    if question == 2:
-        x_val, y_val = extract_data(val_data[:2])
-        dtree.post_prune(x_val, y_val)
-
-    x_test, y_test = extract_data(test_data[2:])
-    predictions = [1]
-    acc = 0
-    for i in range(x_test.shape[0]):
-        predictions.append(int(dtree.predict(x_test[i])))
-        # acc += int(dtree.predict(x_test[i]) == y_test[i])
-
-    return predictions
 
 
 def main():
-    question = sys.argv[1]
-    train_data = sys.argv[2]
-    val_data = sys.argv[3]
-    test_data = sys.argv[4]
-    output_file = sys.argv[5]
-    output = run(train_data, test_data, val_data, int(question))
-    write_predictions(output_file, output)
+    # load data
+    train_file = "C:/IITD/sem5/col774-ml/datasets/decision_tree/decision_tree/train.csv"
+    test_file = "C:/IITD/sem5/col774-ml/datasets/decision_tree/decision_tree/test.csv"
+    val_file = "C:/IITD/sem5/col774-ml/datasets/decision_tree/decision_tree/val.csv"
+    train_data = np.genfromtxt(train_file, delimiter=',')
+    test_data = np.genfromtxt(test_file, delimiter=',')
+    val_data = np.genfromtxt(val_file, delimiter=',')
+
+    train_data = train_data[2: :]
+    x, y = extract_data(train_data)
+    x_val, y_val = extract_data(val_data[2:])
+    x_test, y_test = extract_data(test_data[2:])
+    num_attributes = x.shape[1]
+    num_labels = 7
+
+    dtree = DecisionTree(train_data, num_attributes, num_labels, max_depth=40)
+    dtree.train()
+    dtree.post_prune(x_val, y_val, x, y, x_test, y_test)
+
+
 
 
 if __name__ == '__main__':
