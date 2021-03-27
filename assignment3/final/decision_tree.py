@@ -227,14 +227,14 @@ def run(train_data, test_data, val_data, question):
     if question == 1:
         max_depth = 50
     else:
-        max_depth = 15
+        max_depth = 30
 
     dtree = DecisionTree(train_data, num_attributes, num_labels, max_depth)
     dtree.train()
 
-    if question == 2:
-        x_val, y_val = extract_data(val_data[:2])
-        dtree.post_prune(x_val, y_val)
+    # if question == 2:
+    #     x_val, y_val = extract_data(val_data[:2])
+    #     dtree.post_prune(x_val, y_val)
 
     x_test, y_test = extract_data(test_data[2:])
     predictions = [1]
